@@ -15,3 +15,11 @@
 Thumbs.db
 [Dd]esktop.ini
 .DS_Store
+
+# Secrets & environment
+.env
+.env.*
+*.key
+*.pem
+*.sig
+*.log
