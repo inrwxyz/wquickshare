@@ -1,0 +1,1 @@
+{"default":{"identifier":"default","description":"Default permissions for WQuickShare","local":true,"windows":["main"],"permissions":["core:default","core:event:default","core:webview:default","core:window:default"]}}

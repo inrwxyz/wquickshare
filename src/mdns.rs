@@ -347,11 +347,10 @@ pub fn pick_best_ip<'a>(addrs: impl IntoIterator<Item = &'a Ipv4Addr>) -> Option
     best
 }
 
-/// PC er "asol" IPv4 gulo:
-///  1) Wi-Fi router / Phone Hotspot / Ethernet e connected thakle shei IP
-///  2) Windows Mobile Hotspot er IP 192.168.137.1 (PC nijei hotspot dile)
-/// Multi-probe technique: internet na thakleo hotspot gateway (192.168.43.1 / 192.168.1.1 / etc)
-/// diye local adapter IP detect kore.
+/// Active local IPv4 addresses:
+///  1) Wi-Fi router / Phone Hotspot / Ethernet connected IP
+///  2) Windows Mobile Hotspot IP 192.168.137.1 (if PC acts as hotspot)
+/// Multi-probe technique detects the primary interface IP by routing probes towards common gateways.
 pub fn advertise_ips() -> Vec<Ipv4Addr> {
     let mut v: Vec<Ipv4Addr> = Vec::new();
     let probes = [

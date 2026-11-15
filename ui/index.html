@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quick Share</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-group" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></symbol>
+  <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></symbol>
+  <symbol id="i-add" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></symbol>
+  <symbol id="i-file-add" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zm-3-7h-2v-2h-2v2H9v2h2v2h2v-2h2z"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></symbol>
+  <symbol id="i-tablet" viewBox="0 0 24 24"><path d="M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 1.99-.9 1.99-2L23 6c0-1.1-.9-2-2-2zm-2 14H5V6h14v12z"/></symbol>
+  <symbol id="i-laptop" viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></symbol>
+  <symbol id="i-devices" viewBox="0 0 24 24"><path d="M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6zm19 2h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm-1 9h-4v-7h4v7z"/></symbol>
+  <symbol id="i-sync" viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></symbol>
+</svg>
+
+<div id="app">
+
+  <!-- ===== Home (idle + send) ===== -->
+  <section id="view-home" class="view">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="brand-logo" title="Quick Share"><svg class="ic"><use href="#i-send"/></svg></div>
+        <h1 id="deviceName" class="device-name">Quick Share</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="vis-wrap">
+          <button id="visBtn" class="pill" type="button" aria-haspopup="menu" aria-expanded="false">
+            <span class="pill-ic"><svg class="ic"><use href="#i-group"/></svg></span>
+            <span id="visLabel">Everyone</span>
+            <svg class="ic chev"><use href="#i-down"/></svg>
+          </button>
+          <div id="visMenu" class="menu" role="menu" hidden>
+            <button class="menu-item" role="menuitemradio" data-vis="none" type="button">
+              <svg class="ic"><use href="#i-eye-off"/></svg><span>No one</span><svg class="ic tick"><use href="#i-check"/></svg>
+            </button>
+            <button class="menu-item" role="menuitemradio" data-vis="everyone" type="button">
+              <svg class="ic"><use href="#i-group"/></svg><span>Everyone</span><svg class="ic tick"><use href="#i-check"/></svg>
+            </button>
+            <button class="menu-item" role="menuitemradio" data-vis="temp" type="button">
+              <svg class="ic"><use href="#i-group"/></svg><span>Everyone for 10 minutes</span><svg class="ic tick"><use href="#i-check"/></svg>
+            </button>
+          </div>
+        </div>
+        <button id="btnSettings" class="icon-btn" type="button" aria-label="Settings"><svg class="ic"><use href="#i-gear"/></svg></button>
+      </div>
+    </header>
+
+    <main class="home-main">
+      <!-- Idle -->
+      <div id="idle" class="drop">
+        <div class="drop-icon"><svg class="ic"><use href="#i-send"/></svg></div>
+        <p class="drop-title">Drop files or folders to send</p>
+        <div class="drop-actions">
+          <button id="btnSelect" class="link-btn" type="button"><svg class="ic"><use href="#i-add"/></svg>Select</button>
+          <button id="btnSelectFolder" class="link-btn muted" type="button"><svg class="ic"><use href="#i-folder"/></svg>Folder</button>
+        </div>
+      </div>
+
+      <!-- Send flow -->
+      <div id="send" class="send" hidden>
+        <div class="card files-card">
+          <div class="card-head">
+            <div class="badge round"><svg class="ic"><use href="#i-check"/></svg></div>
+            <div class="card-titles">
+              <h2>Selected files</h2>
+              <p id="filesSummary">Sharing 1 file</p>
+            </div>
+            <button id="btnCollapse" class="icon-btn dark" type="button" aria-label="Show or hide files" aria-expanded="true"><svg class="ic"><use href="#i-up"/></svg></button>
+          </div>
+          <div id="fileTiles" class="tiles"></div>
+          <div class="card-actions">
+            <button id="btnClear" class="chip-btn" type="button"><svg class="ic"><use href="#i-trash"/></svg>Clear</button>
+            <button id="btnAdd" class="chip-btn solid" type="button"><svg class="ic"><use href="#i-add"/></svg>Add</button>
+          </div>
+        </div>
+
+        <div class="card devices-card">
+          <div id="searching" class="searching">
+            <div class="radar"><svg class="ic"><use href="#i-sync"/></svg></div>
+            <p>Looking for nearby devices…</p>
+          </div>
+          <div id="found" hidden>
+            <div class="card-head">
+              <div class="badge square"><svg class="ic"><use href="#i-devices"/></svg></div>
+              <div class="card-titles"><h2>Other devices</h2></div>
+            </div>
+            <div id="deviceGrid" class="device-grid"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <!-- ===== Settings ===== -->
+  <section id="view-settings" class="view" hidden>
+    <header class="topbar settings-bar">
+      <button id="btnBack" class="icon-btn" type="button" aria-label="Back"><svg class="ic"><use href="#i-back"/></svg></button>
+      <h1 class="settings-title">Settings</h1>
+    </header>
+    <main class="settings-main">
+      <div class="group">
+        <div class="row static">
+          <div class="row-text"><h3>Device name</h3><p id="setName">-</p></div>
+        </div>
+        <button id="rowVis" class="row" type="button" aria-expanded="false">
+          <div class="row-text"><h3>Device visibility</h3><p id="setVis">Anyone nearby can share with you</p></div>
+          <svg class="ic row-chev"><use href="#i-down"/></svg>
+        </button>
+        <div id="setVisOptions" class="row-options" hidden>
+          <button class="opt" data-vis="none" type="button"><span class="dot"></span>No one</button>
+          <button class="opt" data-vis="everyone" type="button"><span class="dot"></span>Everyone</button>
+          <button class="opt" data-vis="temp" type="button"><span class="dot"></span>Everyone for 10 minutes</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <button id="rowFolder" class="row" type="button">
+          <div class="row-text"><h3>Save received files to</h3><p id="setDir">-</p></div>
+        </button>
+        <div class="row static">
+          <div class="row-text"><h3>Run automatically at start-up</h3><p>Be ready to receive files by letting Quick Share run when your computer starts</p></div>
+          <label class="switch"><input id="swStartup" type="checkbox" aria-label="Run automatically at start-up"><span class="track"></span></label>
+        </div>
+        <button id="rowAbout" class="row" type="button" aria-expanded="false">
+          <div class="row-text"><h3>About Quick Share</h3><p id="setVersion">Version 0.1.0</p></div>
+          <svg class="ic row-chev"><use href="#i-down"/></svg>
+        </button>
+        <div id="aboutBody" class="row-options about" hidden>
+          <p>Quick Share for Windows. Send and receive files with nearby Android devices over your local network.</p>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <!-- ===== Dialogs ===== -->
+  <div id="backdrop" class="backdrop" hidden>
+    <div id="dialog" class="dialog" role="dialog" aria-modal="true" aria-live="polite"></div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

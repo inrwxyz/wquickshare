@@ -1,0 +1,23 @@
+[package]
+name = "wquickshare-app"
+version = "0.1.0"
+description = "WQuickShare - Native Windows Quick Share Testing App"
+authors = ["Inex"]
+license = "GPL-3.0-or-later"
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+wquickshare = { path = ".." }
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rfd = "0.15"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1

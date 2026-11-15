@@ -124,10 +124,16 @@ async fn run_receiver(
                 }
                 "offer" => {
                     let dev = evt.get("device").and_then(|v| v.as_str()).unwrap_or("Device");
-                    let total_bytes = evt.get("total_bytes").and_then(|v| v.as_u64()).unwrap_or(0);
+                    let pin = evt.get("pin").and_then(|v| v.as_str()).unwrap_or("----");
+                    let total_bytes = evt
+                        .get("total")
+                        .or_else(|| evt.get("total_bytes"))
+                        .and_then(|v| v.as_u64())
+                        .unwrap_or(0);
                     let mb = (total_bytes as f64) / (1024.0 * 1024.0);
 
                     println!("\n📥 Incoming transfer offer from: {}", dev);
+                    println!("   🔑 Pairing PIN: [{}]", pin);
                     if let Some(files) = evt.get("files").and_then(|v| v.as_array()) {
                         println!("   Files ({}):", files.len());
                         for f in files {
@@ -148,17 +154,34 @@ async fn run_receiver(
                     }
                 }
                 "progress" => {
-                    let percent = evt.get("percent").and_then(|v| v.as_f64()).unwrap_or(0.0);
-                    let speed = evt.get("speed_mbps").and_then(|v| v.as_f64()).unwrap_or(0.0);
+                    let percent = evt
+                        .get("pct")
+                        .or_else(|| evt.get("percent"))
+                        .and_then(|v| v.as_f64())
+                        .unwrap_or(0.0);
+                    let speed = evt
+                        .get("mbps")
+                        .or_else(|| evt.get("speed_mbps"))
+                        .and_then(|v| v.as_f64())
+                        .unwrap_or(0.0);
                     let cur = evt.get("file_index").and_then(|v| v.as_u64()).unwrap_or(1);
-                    let total = evt.get("file_count").and_then(|v| v.as_u64()).unwrap_or(1);
+                    let total = evt
+                        .get("files")
+                        .or_else(|| evt.get("file_count"))
+                        .and_then(|v| v.as_u64())
+                        .unwrap_or(1);
                     print!(
                         "\r⏳ Receiving [{}/{}]: {:5.1}% ({:6.2} MB/s) [p:pause, c:cancel] ",
                         cur, total, percent, speed
                     );
                     let _ = std::io::Write::flush(&mut std::io::stdout());
                 }
-                "rx_finished" => {
+                "file_done" => {
+                    if let Some(name) = evt.get("name").and_then(|v| v.as_str()) {
+                        println!("\n📦 Received: {}", name);
+                    }
+                }
+                "rx_session_end" | "rx_finished" => {
                     println!("\n✅ Transfer completed successfully!");
                 }
                 "error" => {
@@ -223,11 +246,15 @@ async fn run_scanner(timeout: u64) -> Result<(), Box<dyn std::error::Error>> {
 
     events::add_listener(|evt| {
         if let Some(t) = evt.get("type").and_then(|v| v.as_str()) {
-            if t == "device_found" {
+            if t == "device_found" || t == "device" {
                 let name = evt.get("name").and_then(|v| v.as_str()).unwrap_or("Unknown");
                 let ip = evt.get("ip").and_then(|v| v.as_str()).unwrap_or("0.0.0.0");
                 let port = evt.get("port").and_then(|v| v.as_u64()).unwrap_or(0);
-                let dev_type = evt.get("device_type").and_then(|v| v.as_u64()).unwrap_or(0);
+                let dev_type = evt
+                    .get("dev_type")
+                    .or_else(|| evt.get("device_type"))
+                    .and_then(|v| v.as_u64())
+                    .unwrap_or(0);
                 let type_str = match dev_type {
                     1 => "Phone",
                     2 => "Tablet",

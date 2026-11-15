@@ -118,6 +118,9 @@ impl QuickShareServer {
         // -------------------------------------------------------------
         socket.read_exact(&mut len_buf).await?;
         let len = u32::from_be_bytes(len_buf) as usize;
+        if len == 0 || len > 10 * 1024 * 1024 {
+            return Err("Pre-auth frame length invalid in ConnectionRequest".into());
+        }
         let mut frame_bytes = vec![0u8; len];
         socket.read_exact(&mut frame_bytes).await?;
 
@@ -140,6 +143,9 @@ impl QuickShareServer {
         // -------------------------------------------------------------
         socket.read_exact(&mut len_buf).await?;
         let len = u32::from_be_bytes(len_buf) as usize;
+        if len == 0 || len > 10 * 1024 * 1024 {
+            return Err("Pre-auth frame length invalid in ClientInit".into());
+        }
         let mut client_init_bytes = vec![0u8; len];
         socket.read_exact(&mut client_init_bytes).await?;
 
@@ -156,6 +162,9 @@ impl QuickShareServer {
         // -------------------------------------------------------------
         socket.read_exact(&mut len_buf).await?;
         let len = u32::from_be_bytes(len_buf) as usize;
+        if len == 0 || len > 10 * 1024 * 1024 {
+            return Err("Pre-auth frame length invalid in ClientFinish".into());
+        }
         let mut client_finish_bytes = vec![0u8; len];
         socket.read_exact(&mut client_finish_bytes).await?;
 
@@ -194,6 +203,9 @@ impl QuickShareServer {
         loop {
             socket.read_exact(&mut len_buf).await?;
             let flen = u32::from_be_bytes(len_buf) as usize;
+            if flen == 0 || flen > 10 * 1024 * 1024 {
+                return Err("Frame length invalid during mutual accept".into());
+            }
             let mut fbytes = vec![0u8; flen];
             socket.read_exact(&mut fbytes).await?;
 
@@ -326,6 +338,9 @@ impl QuickShareServer {
                             Default::default(),
                         ).await?;
                         println!("[Quick Share] You REJECTED the transfer.");
+                        if let Ok(mut g) = LAST_RX_SESSION.lock() {
+                            *g = None;
+                        }
                         break 'main;
                     }
                     continue 'main;
@@ -335,6 +350,9 @@ impl QuickShareServer {
                         t.abort();
                     }
                     if let Ok(mut g) = CONSENT_TX.lock() {
+                        *g = None;
+                    }
+                    if let Ok(mut g) = LAST_RX_SESSION.lock() {
                         *g = None;
                     }
                     crate::events::emit(serde_json::json!({ "type": "offer_closed" }));
